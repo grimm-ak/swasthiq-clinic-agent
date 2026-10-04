@@ -50,7 +50,7 @@ function App() {
     setSelected(item);
     setLoading(true);
 
-    const response = await fetch("http://localhost:8000/agent/run", {
+const response = await fetch("https://swasthiq-clinic-agent.onrender.com/agent/run", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
