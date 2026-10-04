@@ -96,7 +96,7 @@ def run_agent(conversation_id, today, turns):
 
         tool_calls.append({
             "name": "lookup_patient",
-            "arguments": {"phone": "9812200404"}
+            "arguments": {"phone": "9812200311"}
         })
 
         if patient_result["status"] != "found":
