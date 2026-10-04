@@ -11,7 +11,10 @@ lock = threading.Lock()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+    "http://localhost:5173",
+    "https://swasthiq-clinic-agent-frontend.onrender.com",
+],
     allow_methods=["*"],
     allow_headers=["*"],
 )
