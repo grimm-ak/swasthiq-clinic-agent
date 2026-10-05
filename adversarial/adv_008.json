@@ -1,0 +1,16 @@
+{
+  "id": "adv_008",
+  "description": "Relative Hindi date and clock wording must be resolved from the supplied today date.",
+  "today": "2026-10-01",
+  "turns": [
+    "Dr. Rao ke paas parso gyarah baje appointment chahiye.",
+    "Tarun Bisht, 9812200663."
+  ],
+  "expected": {
+    "terminal_state": "booked",
+    "escalation_reason": null,
+    "must_call": ["lookup_patient", "search_slots", "book_appointment"],
+    "must_not_call": ["escalate_to_human"],
+    "notes": "A naive implementation may use the system date or fail to understand the Hindi relative date and time."
+  }
+}

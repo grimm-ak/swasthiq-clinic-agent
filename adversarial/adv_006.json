@@ -1,0 +1,17 @@
+{
+  "id": "adv_006",
+  "description": "The caller provides no actionable request despite several turns.",
+  "today": "2026-10-01",
+  "turns": [
+    "Hello ji.",
+    "Haan, boliye...",
+    "Nahi kuch nahi, rehne dijiye."
+  ],
+  "expected": {
+    "terminal_state": "abandoned",
+    "escalation_reason": null,
+    "must_call": [],
+    "must_not_call": ["book_appointment", "cancel_appointment", "reschedule_appointment"],
+    "notes": "The agent should not invent a task or escalate an interaction that requires no human follow-up."
+  }
+}

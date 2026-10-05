@@ -1,0 +1,17 @@
+{
+  "id": "adv_007",
+  "description": "The caller requests an occupied slot and then supplies a replacement time before identifying the patient.",
+  "today": "2026-10-01",
+  "turns": [
+    "8 tareekh ko subah 9 baje Dr. Rao ke paas jaana hai.",
+    "Agar 9 baje nahi hai toh 9:30 kar dijiye.",
+    "Shalini Uniyal, 9812200694."
+  ],
+  "expected": {
+    "terminal_state": "booked",
+    "escalation_reason": null,
+    "must_call": ["lookup_patient", "search_slots", "book_appointment"],
+    "must_not_call": ["escalate_to_human"],
+    "notes": "The initial slot is occupied. A naive agent may confirm or double-book it instead of using the later requested slot."
+  }
+}
