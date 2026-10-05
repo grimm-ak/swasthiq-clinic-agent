@@ -44,12 +44,21 @@ swasthiq-clinic-agent/
 │   └── requirements.txt
 ├── frontend/
 ├── adversarial/
+│   ├── adv_001.json
+│   ├── adv_002.json
+│   ├── adv_003.json
+│   ├── adv_004.json
+│   ├── adv_005.json
+│   ├── adv_006.json
+│   ├── adv_007.json
+│   └── adv_008.json
 ├── conversations/
 ├── clinic.json
 ├── runner.py
 ├── schema.md
 ├── DECISIONS.md
-└── README.md
+├── README.md
+└── AI_TRANSCRIPT.txt
 ```
 
 ## Running the Backend
@@ -88,7 +97,7 @@ http://localhost:5173
 
 ### POST `/agent/run`
 
-Example request:
+The evaluation endpoint accepts:
 
 ```json
 {
@@ -102,12 +111,25 @@ Example request:
 }
 ```
 
-The API returns the required response contract:
+The response follows the required contract:
 
 ```json
 {
   "conversation_id": "cv_0001",
-  "tool_calls": [],
+  "tool_calls": [
+    {
+      "name": "lookup_patient",
+      "arguments": {}
+    },
+    {
+      "name": "search_slots",
+      "arguments": {}
+    },
+    {
+      "name": "book_appointment",
+      "arguments": {}
+    }
+  ],
   "terminal_state": "booked",
   "escalation_reason": null,
   "patient_id": "pt_0013",
@@ -120,6 +142,8 @@ The API returns the required response contract:
   }
 }
 ```
+
+The tool-call arguments above are illustrative. The running agent records the actual arguments passed to each tool.
 
 ## Agent Design
 
@@ -136,17 +160,21 @@ The clinic tools are deterministic ground-truth operations:
 
 Tools never call an LLM.
 
-Relative dates are resolved using the `today` value supplied in the request.
+Relative dates are resolved using the `today` value supplied in the request rather than the system clock.
 
 Safety checks run before appointment actions.
 
-### Model and Efficiency
+## Model and Efficiency
 
 **Model:** Deterministic rule-based agent — no LLM model is called.
 
-**LLM tokens per conversation:** 0
+**LLM tokens per conversation:** 0.
 
-The API reports `tokens` and `latency_ms` in the response metrics. Since no LLM is used, token usage is zero.
+No external model inference is used, so LLM token usage is zero for every conversation.
+
+The API reports `tokens` and `latency_ms` in the response metrics.
+
+Latency is also measured by `runner.py` for each conversation. Local latency depends on process/server warm-up and environment; the runner records the measured value for every run rather than using a fabricated fixed latency.
 
 ## Safety
 
@@ -159,6 +187,7 @@ The agent:
 - Refuses prompt-injection attempts.
 - Never invents patients, appointments, or slots.
 - Does not continue booking after an urgent clinical escalation.
+- Stops the booking flow when a clinical emergency appears during a conversation.
 
 ## Concurrency
 
@@ -168,7 +197,9 @@ The booking tool also checks the requested slot before creating an appointment, 
 
 ## Testing
 
-Run the provided conversation scripts:
+### Provided conversation scripts
+
+Run the 15 provided conversation scripts:
 
 ```bash
 python3 runner.py
@@ -177,46 +208,119 @@ python3 runner.py
 Expected result:
 
 ```text
-15 script(s)
-failures: 0
+15 script(s), 1 run(s) each
+results in results/   failures: 0
 ```
 
-Run adversarial tests:
+The provided conversations cover:
+
+- Straightforward booking
+- Rescheduling
+- Cancellation
+- Closed clinic days
+- Doctor leave
+- Ambiguous patients
+- Guardian authorization
+- Unauthorized actions
+- Medical advice
+- Clinical emergencies
+- Relative dates and Hindi clock times
+- Incomplete conversations
+- Prompt injection
+- Already-booked slots
+
+### Adversarial cases
+
+The repository contains eight additional adversarial conversation scripts in `/adversarial`.
+
+Run them three times to check both correctness and determinism:
 
 ```bash
-python3 adversarial/test_adversarial.py
+python3 runner.py --dir adversarial --repeat 3
 ```
 
-Expected result:
+The final local verification produced:
 
 ```text
-All adversarial tests passed.
+8 script(s), 3 run(s) each
+deterministic across 3 runs
+
+results in results/   failures: 0
 ```
 
-The adversarial tests cover:
+This represents 24 successful adversarial runs.
 
-- Clinical emergency escalation
-- Prompt injection refusal
-- Ambiguous patient handling
+The adversarial cases cover:
 
-## Design Decisions
+- Clinical emergency appearing during a booking
+- Prompt injection and fake administrator authority
+- Ambiguous patient identity
+- Unauthorized third-party action
+- Medical advice
+- Non-actionable conversations
+- Occupied appointment slots and alternative times
+- Hindi relative dates and clock times
 
-See [DECISIONS.md](DECISIONS.md).
+### Frontend checks
 
-## Submission Links
+The frontend was also verified with:
 
-### GitHub
+```bash
+npm run lint
+npm run build
+```
+
+Both completed successfully.
+
+## Determinism
+
+The same conversation is designed to produce the same:
+
+- `terminal_state`
+- `escalation_reason`
+- set of tool names
+
+across repeated runs.
+
+The adversarial suite was run three times and produced stable fingerprints across all eight cases.
+
+## Live Demo
+
+**Frontend:**
+
+https://swasthiq-clinic-agent-frontend.onrender.com/
+
+**Backend API:**
+
+https://swasthiq-clinic-agent.onrender.com/
+
+## GitHub
 
 https://github.com/grimm-ak/swasthiq-clinic-agent
 
-### Live Demo
+## Design Decisions
 
-_To be added after deployment._
+See [`DECISIONS.md`](DECISIONS.md) for the design decisions, ambiguities, safety choices, and implementation trade-offs.
 
-### Demo Video
+## AI Transcript
 
-_To be added._
+The coding-assistant prompts used during development are included in:
 
-### AI Transcript
+```text
+AI_TRANSCRIPT.txt
+```
 
-_To be added._
+## Demo Video
+
+To be added before submission.
+
+## Submission
+
+The final submission will include:
+
+- Public GitHub repository
+- Live frontend link
+- Three-minute video
+- AI transcript
+- Approximate hours spent on the assignment
+- What would be improved with another four hours
