@@ -58,6 +58,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState("queue");
+  const [resolved, setResolved] = useState([]);
 
   async function runConversation(item) {
     setSelected(item);
@@ -101,6 +102,9 @@ function App() {
       setLoading(false);
     }
   }
+  function resolveConversation(id) {
+  setResolved((current) => [...current, id]);
+}
 
   function reasonClass(reason) {
     if (reason === "clinical_urgent") return "clinical";
@@ -131,7 +135,9 @@ function App() {
           >
             <span className="sidebar-icon">▦</span>
             Handoff Queue
-            <span className="sidebar-count">{conversations.length}</span>
+            <span className="sidebar-count">
+              {conversations.length-resolved.length}
+              </span>
           </button>
 
           <button
@@ -155,11 +161,12 @@ function App() {
       <main className="main">
         {view === "queue" ? (
           <QueueView
-            conversations={conversations}
-            selected={selected}
-            onSelect={runConversation}
-            reasonClass={reasonClass}
-          />
+  conversations={conversations.filter((item) => !resolved.includes(item.id))}
+  selected={selected}
+  onSelect={runConversation}
+  reasonClass={reasonClass}
+  onResolve={resolveConversation}
+/>
         ) : (
           <DetailView
             selected={selected}
@@ -178,7 +185,8 @@ function QueueView({
   conversations,
   selected,
   onSelect,
-  reasonClass
+  reasonClass,
+  onResolve
 }) {
   return (
     <>
@@ -212,7 +220,7 @@ function QueueView({
           <StatCard
             label="ESCALATED"
             value="6"
-            detail="4 still open"
+            detail={`${conversations.length} still open`}
           />
           <StatCard
             label="URGENT"
@@ -275,7 +283,7 @@ function QueueView({
                   className="resolve-button"
                   onClick={(event) => {
                     event.stopPropagation();
-                    onSelect(item);
+                    onResolve(item.id);
                   }}
                 >
                   Resolve
