@@ -61,7 +61,11 @@ swasthiq-clinic-agent/
 └── AI_TRANSCRIPT.txt
 ```
 
-## Running the Backend
+## Quick Start
+
+The frontend communicates with the FastAPI backend, so **start the backend first**, then start the frontend.
+
+### 1. Start the Backend
 
 ```bash
 cd backend
@@ -77,9 +81,9 @@ The API will be available at:
 http://localhost:8000
 ```
 
-## Running the Frontend
+### 2. Start the Frontend
 
-In another terminal:
+Open a **second terminal** and run:
 
 ```bash
 cd frontend
@@ -92,6 +96,8 @@ The frontend will be available at:
 ```text
 http://localhost:5173
 ```
+
+> **Important:** Keep the backend running while using the frontend locally. The React frontend sends requests to the FastAPI `/agent/run` endpoint.
 
 ## API
 
@@ -197,7 +203,7 @@ The booking tool also checks the requested slot before creating an appointment, 
 
 ## Testing
 
-### Provided conversation scripts
+### Provided Conversation Scripts
 
 Run the 15 provided conversation scripts:
 
@@ -229,9 +235,9 @@ The provided conversations cover:
 - Prompt injection
 - Already-booked slots
 
-### Adversarial cases
+### Adversarial Cases
 
-The repository contains eight additional adversarial conversation scripts in `/adversarial`.
+The repository contains eight additional adversarial conversation scripts in `adversarial`.
 
 Run them three times to check both correctness and determinism:
 
@@ -261,7 +267,7 @@ The adversarial cases cover:
 - Occupied appointment slots and alternative times
 - Hindi relative dates and clock times
 
-### Frontend checks
+### Frontend Checks
 
 The frontend was also verified with:
 
