@@ -1,0 +1,67 @@
+# AI Transcript — SwasthiQ Clinic Front Desk Agent
+
+This file records the main prompts and instructions used with the coding assistant during development.
+
+## Project Setup
+
+- Build the SwasthiQ clinic front-desk take-home assignment step by step.
+- Keep the implementation minimal, readable, and easy to understand.
+- Provide the overall project framework first, then implement each file step by step.
+- Use Python/FastAPI for the backend and React for the frontend.
+- Do not over-engineer the solution.
+
+## Backend
+
+- Implement the six required clinic tools:
+  lookup_patient, search_slots, book_appointment,
+  reschedule_appointment, cancel_appointment, and escalate_to_human.
+- Keep the tools deterministic and independent of any LLM.
+- Ensure ambiguous patient lookup returns candidates instead of selecting a patient.
+- Prevent double booking.
+- Reset clinic state for each conversation run.
+- Implement the required POST /agent/run response contract.
+- Handle multi-turn conversations.
+- Escalate clinical emergencies immediately.
+- Refuse prompt-injection attempts.
+- Escalate medical advice requests.
+- Escalate unauthorized actions.
+- Never invent patients, slots, or appointments.
+- Make the agent deterministic across repeated runs.
+
+## Testing and Debugging
+
+- Test every clinic tool individually.
+- Run all 15 provided conversation scripts.
+- Investigate and fix failures while preserving the assignment contract.
+- Add eight adversarial conversation cases in the required schema.
+- Run the adversarial cases three times to verify deterministic outcomes.
+- Keep the implementation simple and avoid unnecessary dependencies.
+
+## Frontend
+
+- Build the required React frontend with:
+  1. Handoff Queue
+  2. Conversation Detail
+- Match the structure and visual style of the provided assignment reference.
+- Show tool calls inline in Conversation Detail.
+- Show outcome and determinism information.
+- Connect the frontend to the live FastAPI backend.
+- Keep the UI simple and responsive.
+
+## Deployment
+
+- Deploy the FastAPI backend publicly.
+- Deploy the React frontend publicly.
+- Configure CORS for the deployed frontend.
+- Verify the live frontend communicates with the deployed backend.
+
+## Final Verification
+
+- Run the full conversation suite.
+- Run the eight adversarial cases three times.
+- Run frontend lint and production build checks.
+- Check that Git has no unintended changes.
+- Review README requirements.
+- Prepare the final submission materials.
+
+The implementation was developed with AI assistance, while keeping the final project intentionally small and understandable.
