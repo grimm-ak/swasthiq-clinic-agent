@@ -220,7 +220,7 @@ function QueueView({
           <StatCard
             label="ESCALATED"
             value="6"
-            detail={`${conversations.length} still open`}
+            detail={` ${conversations.length} still open`}
           />
           <StatCard
             label="URGENT"
