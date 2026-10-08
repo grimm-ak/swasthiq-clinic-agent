@@ -308,17 +308,11 @@ https://github.com/grimm-ak/swasthiq-clinic-agent
 
 See [`DECISIONS.md`](DECISIONS.md) for the design decisions, ambiguities, safety choices, and implementation trade-offs.
 
-## AI Transcript
 
-The coding-assistant prompts used during development are included in:
-
-```text
-AI_TRANSCRIPT.txt
-```
 
 ## Demo Video
 
-To be added before submission.
+https://www.loom.com/share/14fa50951a7643e183a73dbc33de217b
 
 ## Submission
 
